@@ -19,10 +19,17 @@ export enum PlaybackEvent {
   ITERATION = "iteration",
 }
 
+export enum PianoAudioType {
+  NONE = "NONE",
+  ALL = "ALL",
+  LEFT = "LEFT",
+  RIGHT = "RIGHT",
+}
+
 interface PlaybackSettings {
   bpm: number;
   masterVolume: number;
-  pianoVolumeEnable: boolean;
+  pianoAudioType: PianoAudioType; // PianoAudioType
   pianoLeftHandVolume: number; // 0 - 1
   pianoRightHandVolume: number; // 0 - 1
 }
@@ -71,7 +78,7 @@ export default class PlaybackEngine {
     this.playbackSettings = {
       bpm: this.defaultBpm,
       masterVolume: 1,
-      pianoVolumeEnable: false,
+      pianoAudioType: PianoAudioType.ALL,
       pianoLeftHandVolume : 1,
       pianoRightHandVolume: 1,
     };
@@ -224,15 +231,17 @@ export default class PlaybackEngine {
       if (noteDuration === 0) continue;
       var noteVolume = getNoteVolume(note);
       const noteParentStaffId = note.ParentVoiceEntry.ParentSourceStaffEntry.ParentStaff.Id;
-      if (this.playbackSettings.pianoVolumeEnable) {
-        if (noteParentStaffId === 1) {
-          // right hand
-          noteVolume = this.playbackSettings.pianoRightHandVolume;
-        } else if (noteParentStaffId > 1) {
-          // left hand
-          noteVolume = this.playbackSettings.pianoLeftHandVolume;
-        }
+      if (this.playbackSettings.pianoAudioType === PianoAudioType.LEFT && noteParentStaffId > 1) {
+        // left hand
+        noteVolume = this.playbackSettings.pianoLeftHandVolume;
+      } else if (this.playbackSettings.pianoAudioType === PianoAudioType.RIGHT && noteParentStaffId === 1) {
+        // right hand
+        noteVolume = this.playbackSettings.pianoRightHandVolume;
+      } else if (this.playbackSettings.pianoAudioType === PianoAudioType.NONE) {
+        // audio track === None
+        noteVolume = 0;
       }
+
       const noteArticulation = getNoteArticulationStyle(note);
 
       const midiPlaybackInstrument = (note as any).ParentVoiceEntry.ParentVoice.midiInstrumentId;
