@@ -22,6 +22,9 @@ export enum PlaybackEvent {
 interface PlaybackSettings {
   bpm: number;
   masterVolume: number;
+  pianoVolumeEnable: boolean;
+  pianoLeftHandVolume: number; // 0 - 1
+  pianoRightHandVolume: number; // 0 - 1
 }
 
 export default class PlaybackEngine {
@@ -70,6 +73,9 @@ export default class PlaybackEngine {
     this.playbackSettings = {
       bpm: this.defaultBpm,
       masterVolume: 1,
+      pianoVolumeEnable: false,
+      pianoLeftHandVolume : 1,
+      pianoRightHandVolume: 1,
     };
 
     this.setState(PlaybackState.INIT);
@@ -218,7 +224,17 @@ export default class PlaybackEngine {
       }
       const noteDuration = getNoteDuration(note, this.wholeNoteLength);
       if (noteDuration === 0) continue;
-      const noteVolume = getNoteVolume(note);
+      var noteVolume = getNoteVolume(note);
+      const noteParentStaffId = note.ParentVoiceEntry.ParentSourceStaffEntry.ParentStaff.Id;
+      if (this.playbackSettings.pianoVolumeEnable) {
+        if (noteParentStaffId === 1) {
+          // right hand
+          noteVolume = this.playbackSettings.pianoRightHandVolume;
+        } else if (noteParentStaffId > 1) {
+          // left hand
+          noteVolume = this.playbackSettings.pianoLeftHandVolume;
+        }
+      }
       const noteArticulation = getNoteArticulationStyle(note);
 
       const midiPlaybackInstrument = (note as any).ParentVoiceEntry.ParentVoice.midiInstrumentId;
