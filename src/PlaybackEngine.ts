@@ -231,12 +231,24 @@ export default class PlaybackEngine {
       if (noteDuration === 0) continue;
       var noteVolume = getNoteVolume(note);
       const noteParentStaffId = note.ParentVoiceEntry.ParentSourceStaffEntry.ParentStaff.Id;
-      if (this.playbackSettings.pianoAudioType === PianoAudioType.LEFT && noteParentStaffId > 1) {
-        // left hand
-        noteVolume = this.playbackSettings.pianoLeftHandVolume;
-      } else if (this.playbackSettings.pianoAudioType === PianoAudioType.RIGHT && noteParentStaffId === 1) {
-        // right hand
-        noteVolume = this.playbackSettings.pianoRightHandVolume;
+      console.log('vi test, noteParentStaffId -> ', noteParentStaffId);
+      console.log('vi test, this.playbackSettings.pianoAudioType -> ', this.playbackSettings.pianoAudioType);
+      if (this.playbackSettings.pianoAudioType === PianoAudioType.LEFT) {
+        if (noteParentStaffId > 1) {
+          // left hand
+          noteVolume = this.playbackSettings.pianoLeftHandVolume;
+        } else {
+          // right hand
+          noteVolume = 0;
+        }        
+      } else if (this.playbackSettings.pianoAudioType === PianoAudioType.RIGHT) {
+        if (noteParentStaffId === 1) {
+          // right hand
+          noteVolume = this.playbackSettings.pianoRightHandVolume;
+        } else {
+          // left hand
+          noteVolume = 0;
+        }
       } else if (this.playbackSettings.pianoAudioType === PianoAudioType.NONE) {
         // audio track === None
         noteVolume = 0;
