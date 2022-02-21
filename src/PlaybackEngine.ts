@@ -166,10 +166,15 @@ export default class PlaybackEngine {
     this.setState(PlaybackState.STOPPED);
     this.stopPlayers();
     this.clearTimeouts();
-    this.scheduler.reset();
+  
+    this.resetScheduler();
+
     this.cursor.reset();
     this.currentIterationStep = 0;
     this.cursor.hide();
+  }
+  resetScheduler() {
+    this.scheduler.reset();
   }
 
   pause() {

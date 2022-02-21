@@ -41,5 +41,6 @@ function registerButtonEvents(audioPlayer) {
     if (audioPlayer.state === "PLAYING" || audioPlayer.state === "PAUSED") {
       audioPlayer.stop();
     }
+    audioPlayer.resetScheduler();
   });
 }
