@@ -113,9 +113,9 @@ export default class PlaybackEngine {
     await this.loadInstruments();
     this.initInstruments();
 
-    this.scheduler = new PlaybackScheduler(this.wholeNoteLength, this.ac, (delay, notes) =>
-      this.notePlaybackCallback(delay, notes)
-    );
+    this.scheduler = new PlaybackScheduler(this.wholeNoteLength, this.ac, (delay, notes, isLastNote) => {
+      this.notePlaybackCallback(delay, notes, isLastNote);
+    });
 
     this.countAndSetIterationSteps();
     this.ready = true;
@@ -224,7 +224,7 @@ export default class PlaybackEngine {
     this.cursor.reset();
   }
 
-  private notePlaybackCallback(audioDelay, notes: Note[]) {
+  private notePlaybackCallback(audioDelay, notes: Note[], isLastNote: boolean) {
     if (this.state !== PlaybackState.PLAYING) return;
     let scheduledNotes: Map<number, NotePlaybackInstruction[]> = new Map();
 

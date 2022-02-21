@@ -2,7 +2,7 @@ import StepQueue from "./internals/StepQueue";
 import { VoiceEntry } from "opensheetmusicdisplay/build/dist/src";
 import { IAudioContext } from "standardized-audio-context";
 
-type NoteSchedulingCallback = (delay: number, notes: any) => void;
+type NoteSchedulingCallback = (delay: number, notes: any, isLastNote: boolean) => void;
 
 export default class PlaybackScheduler {
   public wholeNoteLength: number;
@@ -114,7 +114,8 @@ export default class PlaybackScheduler {
       if (timeToTick < 0) timeToTick = 0;
 
       this.scheduledTicks.add(step.tick);
-      this.noteSchedulingCallback(timeToTick / 1000, step.notes);
+      const isLastNote = this.stepQueueIndex === (Math.max(0, this.stepQueue.steps.length - 1));
+      this.noteSchedulingCallback(timeToTick / 1000, step.notes, isLastNote);
 
       this.stepQueueIndex++;
       nextTick = this.stepQueue.steps[this.stepQueueIndex]?.tick;
