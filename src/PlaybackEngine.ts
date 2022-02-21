@@ -236,8 +236,6 @@ export default class PlaybackEngine {
       if (noteDuration === 0) continue;
       var noteVolume = getNoteVolume(note);
       const noteParentStaffId = note.ParentVoiceEntry.ParentSourceStaffEntry.ParentStaff.Id;
-      console.log('vi test, noteParentStaffId -> ', noteParentStaffId);
-      console.log('vi test, this.playbackSettings.pianoAudioType -> ', this.playbackSettings.pianoAudioType);
       if (this.playbackSettings.pianoAudioType === PianoAudioType.LEFT) {
         if (noteParentStaffId > 1) {
           // left hand
