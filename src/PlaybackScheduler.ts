@@ -82,6 +82,7 @@ export default class PlaybackScheduler {
     this.stepQueueIndex = 0;
     clearInterval(this.scheduleInterval);
     this.schedulerIntervalHandle = null;
+    this.scheduledTicks = new Set();
   }
 
   loadNotes(currentVoiceEntries: VoiceEntry[]) {
