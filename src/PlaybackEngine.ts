@@ -17,6 +17,7 @@ export enum PlaybackState {
 export enum PlaybackEvent {
   STATE_CHANGE = "state-change",
   ITERATION = "iteration",
+  REACHED_END = "reached_end",
 }
 
 export enum PianoAudioType {
@@ -285,6 +286,7 @@ export default class PlaybackEngine {
         if (isLastNote) {
           // reach end
           this.stop();
+          this.events.emit(PlaybackEvent.REACHED_END, this.state);
         }
       })
     );

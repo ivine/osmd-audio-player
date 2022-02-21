@@ -15,6 +15,10 @@
     console.log(notes);
   });
 
+  audioPlayer.on("reached_end", state => {
+    console.log('audioPlayer, reached_end --> ', state);
+  });
+
   hideLoadingMessage();
   registerButtonEvents(audioPlayer);
 })();
