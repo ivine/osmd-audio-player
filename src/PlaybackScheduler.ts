@@ -1,5 +1,5 @@
 import StepQueue from "./internals/StepQueue";
-import { VoiceEntry } from "opensheetmusicdisplay/build/dist/src";
+import { VoiceEntry } from "@ivine/opensheetmusicdisplay/build/dist/src";
 import { IAudioContext } from "standardized-audio-context";
 
 type NoteSchedulingCallback = (delay: number, notes: any, isLastNote: boolean) => void;

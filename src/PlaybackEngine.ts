@@ -1,5 +1,5 @@
 import PlaybackScheduler from "./PlaybackScheduler";
-import { Cursor, OpenSheetMusicDisplay, MusicSheet, Note, Instrument, Voice } from "opensheetmusicdisplay";
+import { Cursor, OpenSheetMusicDisplay, MusicSheet, Note, Instrument, Voice } from "@ivine/opensheetmusicdisplay";
 import { SoundfontPlayer } from "./players/SoundfontPlayer";
 import { InstrumentPlayer, PlaybackInstrument } from "./players/InstrumentPlayer";
 import { NotePlaybackInstruction } from "./players/NotePlaybackOptions";

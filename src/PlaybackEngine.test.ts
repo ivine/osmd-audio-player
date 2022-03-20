@@ -1,6 +1,6 @@
 import PlaybackEngine from ".";
 import { mock, instance, when } from "ts-mockito";
-import { OpenSheetMusicDisplay, Cursor, MusicSheet, PlaybackSettings, Fraction } from "opensheetmusicdisplay";
+import { OpenSheetMusicDisplay, Cursor, MusicSheet, PlaybackSettings, Fraction } from "@ivine/opensheetmusicdisplay";
 import { PlaybackEvent, PlaybackState } from "./PlaybackEngine";
 import { IAudioContext } from "standardized-audio-context";
 

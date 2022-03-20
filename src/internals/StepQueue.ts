@@ -1,4 +1,4 @@
-import { Note } from "opensheetmusicdisplay/build/dist/src";
+import { Note } from "@ivine/opensheetmusicdisplay/build/dist/src";
 
 type ScheduledNotes = {
   tick: number;

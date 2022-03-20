@@ -9,7 +9,7 @@
 
 <script>
 import axios from "axios";
-import { OpenSheetMusicDisplay } from "opensheetmusicdisplay";
+import { OpenSheetMusicDisplay } from "@ivine/opensheetmusicdisplay";
 
 export default {
   props: ["score", "ready"],
