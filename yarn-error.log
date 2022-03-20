@@ -1,0 +1,93 @@
+Arguments: 
+  /Users/a1/.nvm/versions/node/v16.13.0/bin/node /opt/homebrew/Cellar/yarn/1.22.17_2/libexec/bin/yarn.js install
+
+PATH: 
+  /Users/a1/.nvm/versions/node/v16.13.0/bin:/opt/homebrew/opt/ruby/bin:/opt/homebrew/lib/ruby/gems/3.0.0/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/Library/Apple/usr/bin:/opt/homebrew/opt/ruby/bin:/opt/homebrew/lib/ruby/gems/3.0.0/bin:/opt/homebrew/bin:/Users/a1/Library/Android/sdk/tools:/Users/a1/Library/Android/sdk/platform-tools:/opt/apache-maven-3.8.1/bin:/Users/a1/Library/Android/sdk/tools:/Users/a1/Library/Android/sdk/platform-tools:/opt/apache-maven-3.8.1/bin
+
+Yarn version: 
+  1.22.17
+
+Node version: 
+  16.13.0
+
+Platform: 
+  darwin arm64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/ivine: Not found
+      at Request.params.callback [as _callback] (/opt/homebrew/Cellar/yarn/1.22.17_2/libexec/lib/cli.js:67029:18)
+      at Request.self.callback (/opt/homebrew/Cellar/yarn/1.22.17_2/libexec/lib/cli.js:140883:22)
+      at Request.emit (node:events:390:28)
+      at Request.<anonymous> (/opt/homebrew/Cellar/yarn/1.22.17_2/libexec/lib/cli.js:141855:10)
+      at Request.emit (node:events:390:28)
+      at IncomingMessage.<anonymous> (/opt/homebrew/Cellar/yarn/1.22.17_2/libexec/lib/cli.js:141777:12)
+      at Object.onceWrapper (node:events:509:28)
+      at IncomingMessage.emit (node:events:402:35)
+      at endReadableNT (node:internal/streams/readable:1343:12)
+      at processTicksAndRejections (node:internal/process/task_queues:83:21)
+
+npm manifest: 
+  {
+    "name": "@ivine/osmd-audio-player",
+    "version": "0.1.0",
+    "description": "ivine@OSMD_audio_player",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+      "dev": "tsc -w",
+      "test": "jest",
+      "prepare": "npm run build",
+      "build": "tsc -p tsconfig.build.json",
+      "build-umd": "rollup -c rollup.umd.config.js",
+      "install-demo:vue": "npm install --prefix demos/vue-player-demo",
+      "install-demo:basic": "npm install --prefix demos/basic",
+      "install-demos": "run-p install-demo:*",
+      "build-demo:vue": "npm run build --prefix demos/vue-player-demo",
+      "build-demo:basic": "npm run build --prefix demos/basic",
+      "build-demos": "run-p build-demo:*",
+      "build-all": "run-s build build-umd build-demos",
+      "netlify-build": "run-s build install-demos build-demos"
+    },
+    "author": "Jimmy Utterström",
+    "contributors": ["Dwwwwww"],
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/ivine/osmd-audio-player"
+    },
+    "keywords": [
+      "MusicXML",
+      "Music XML",
+      "audio player",
+      "MusicXML audio",
+      "music notation"
+    ],
+    "dependencies": {
+      "ivine@opensheetmusicdisplay": "^0.1.1",
+      "soundfont-player": "^0.12.0",
+      "standardized-audio-context": "^24.1.25"
+    },
+    "devDependencies": {
+      "@babel/core": "^7.9.6",
+      "@babel/preset-env": "^7.9.6",
+      "@babel/preset-typescript": "^7.9.0",
+      "@rollup/plugin-commonjs": "^15.0.0",
+      "@rollup/plugin-node-resolve": "^9.0.0",
+      "@rollup/plugin-typescript": "^6.0.0",
+      "@types/jest": "^25.2.1",
+      "babel-jest": "^26.0.1",
+      "jest": "^26.0.1",
+      "npm-run-all": "^4.1.5",
+      "rollup": "^2.26.11",
+      "rollup-plugin-terser": "^7.0.2",
+      "ts-mockito": "^2.5.0",
+      "tslib": "^2.0.1",
+      "typescript": "^3.7.5"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

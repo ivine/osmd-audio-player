@@ -1,7 +1,7 @@
 {
-  "name": "osmd-audio-player",
-  "version": "0.7.0",
-  "description": "OSMD audio player",
+  "name": "@ivine/osmd-audio-player",
+  "version": "0.1.0",
+  "description": "ivine@OSMD_audio_player",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -20,10 +20,13 @@
     "netlify-build": "run-s build install-demos build-demos"
   },
   "author": "Jimmy Utterström",
+  "contributors": [
+    "Dwwwwww"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jimutt/osmd-audio-player"
+    "url": "https://github.com/ivine/osmd-audio-player"
   },
   "keywords": [
     "MusicXML",
@@ -33,7 +36,7 @@
     "music notation"
   ],
   "dependencies": {
-    "opensheetmusicdisplay": "^0.8.4",
+    "@ivine/opensheetmusicdisplay": "^0.1.1",
     "soundfont-player": "^0.12.0",
     "standardized-audio-context": "^24.1.25"
   },
