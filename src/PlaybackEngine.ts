@@ -47,6 +47,9 @@ export default class PlaybackEngine {
   private iterationSteps: number;
   private currentIterationStep: number;
 
+  private sheetTotalVerticalNotes: number; // 垂直面上的所有 note
+  private sheetRangeVerticalEndNoteIndex: number; // 区间范围内垂直面上的结束音符下标
+
   private timeoutHandles: number[];
 
   public playbackSettings: PlaybackSettings;
@@ -114,8 +117,23 @@ export default class PlaybackEngine {
     await this.loadInstruments();
     this.initInstruments();
 
-    this.scheduler = new PlaybackScheduler(this.wholeNoteLength, this.ac, (delay, notes, isLastNote) => {
-      this.notePlaybackCallback(delay, notes, isLastNote);
+    this.scheduler = new PlaybackScheduler(this.wholeNoteLength, this.ac, (delay, notes, currentNoteIndex) => {
+      this.notePlaybackCallback(delay, notes);
+
+      let lastNoteIndex = this.sheetTotalVerticalNotes;
+      if (this.sheet.noteCursorOptions.enableRange) {
+        lastNoteIndex = this.sheetRangeVerticalEndNoteIndex;
+      }
+
+      // console.log('currentNoteIndex --> ', currentNoteIndex);
+      // console.log('lastNoteIndex --> ', lastNoteIndex);
+      if (currentNoteIndex === lastNoteIndex && this.state === PlaybackState.PLAYING) {
+        // 正在播放中，且达到最后一个音符
+        this.stop();
+        this.events.emit(PlaybackEvent.REACHED_END, this.state);
+        return true;
+      }
+      return false; // 未到达最后一个音符，返回 fasle
     });
 
     this.countAndSetIterationSteps();
@@ -155,9 +173,11 @@ export default class PlaybackEngine {
   async play() {
     await this.ac.resume();
 
-    if (this.state === PlaybackState.INIT || this.state === PlaybackState.STOPPED) {
-      this.cursor.show();
-    }
+    this.cursor.show();
+
+    // if (this.state === PlaybackState.INIT || this.state === PlaybackState.STOPPED) {
+    //   this.cursor.show();
+    // }
 
     this.setState(PlaybackState.PLAYING);
     this.scheduler.start();
@@ -211,7 +231,34 @@ export default class PlaybackEngine {
     this.events.on(event, cb);
   }
 
-  private countAndSetIterationSteps() {
+  public countAndSetIterationSteps() {
+    let notes = 0;
+    for (let tmpMeasure of this.sheet.SourceMeasures) {
+      notes += tmpMeasure.VerticalSourceStaffEntryContainers.length;
+    }
+    this.sheetTotalVerticalNotes = notes;
+
+    let rangeEndNoteIndex = 0;
+    if (this.sheet.noteCursorOptions.enableRange) {
+      let measureList = this.sheet.SourceMeasures;
+      let endMeasureIndex = this.sheet.noteCursorOptions.endMeasureIndex;
+      let endNoteIndex = this.sheet.noteCursorOptions.endNoteIndex;
+      if (endMeasureIndex >= 0) {
+          let tmpMeasureIndex: number = endMeasureIndex;
+          while (tmpMeasureIndex >= 0) {
+              const tmpMeasure = measureList[tmpMeasureIndex];
+              if (tmpMeasureIndex === endMeasureIndex) {
+                rangeEndNoteIndex += endNoteIndex;
+              } else {
+                rangeEndNoteIndex += tmpMeasure.VerticalSourceStaffEntryContainers.length;
+              }
+              tmpMeasureIndex--;
+          }
+      }
+    }
+    this.sheetRangeVerticalEndNoteIndex = rangeEndNoteIndex;
+
+
     this.cursor.reset();
     let steps = 0;
     while (!this.cursor.Iterator.EndReached) {
@@ -225,7 +272,7 @@ export default class PlaybackEngine {
     this.cursor.reset();
   }
 
-  private notePlaybackCallback(audioDelay, notes: Note[], isLastNote: boolean) {
+  private notePlaybackCallback(audioDelay, notes: Note[]) {
     if (this.state !== PlaybackState.PLAYING) return;
     let scheduledNotes: Map<number, NotePlaybackInstruction[]> = new Map();
 
@@ -283,11 +330,6 @@ export default class PlaybackEngine {
       window.setTimeout(() => this.iterationCallback(), Math.max(0, audioDelay * 1000 - 35)), // Subtracting 35 milliseconds to compensate for update delay
       window.setTimeout(() => {
         this.events.emit(PlaybackEvent.ITERATION, notes), audioDelay * 1000;
-        if (isLastNote) {
-          // reach end
-          this.stop();
-          this.events.emit(PlaybackEvent.REACHED_END, this.state);
-        }
       })
     );
   }

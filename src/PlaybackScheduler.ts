@@ -2,7 +2,8 @@ import StepQueue from "./internals/StepQueue";
 import { VoiceEntry } from "@ivine/opensheetmusicdisplay/build/dist/src";
 import { IAudioContext } from "standardized-audio-context";
 
-type NoteSchedulingCallback = (delay: number, notes: any, isLastNote: boolean) => void;
+// 返回是否到达最后一个音符
+type NoteSchedulingCallback = (delay: number, notes: any, currentNoteIndex: number) => boolean;
 
 export default class PlaybackScheduler {
   public wholeNoteLength: number;
@@ -114,8 +115,11 @@ export default class PlaybackScheduler {
       if (timeToTick < 0) timeToTick = 0;
 
       this.scheduledTicks.add(step.tick);
-      const isLastNote = this.stepQueueIndex === (Math.max(0, this.stepQueue.steps.length - 1));
-      this.noteSchedulingCallback(timeToTick / 1000, step.notes, isLastNote);
+      // const isLastNote = this.stepQueueIndex === (Math.max(0, this.stepQueue.steps.length - 1));
+      if (this.noteSchedulingCallback(timeToTick / 1000, step.notes, this.stepQueueIndex)) {
+        // 到达最后一个音符
+        return;
+      }
 
       this.stepQueueIndex++;
       nextTick = this.stepQueue.steps[this.stepQueueIndex]?.tick;
