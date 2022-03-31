@@ -1,6 +1,6 @@
 {
   "name": "@ivine/osmd-audio-player",
-  "version": "0.1.0",
+  "version": "0.1.5",
   "description": "ivine@OSMD_audio_player",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -36,7 +36,7 @@
     "music notation"
   ],
   "dependencies": {
-    "@ivine/opensheetmusicdisplay": "^0.1.1",
+    "@ivine/opensheetmusicdisplay": "^0.1.18",
     "soundfont-player": "^0.12.0",
     "standardized-audio-context": "^24.1.25"
   },

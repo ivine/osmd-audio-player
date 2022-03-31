@@ -26,6 +26,7 @@ class Score extends Component {
 
   async componentDidMount() {
     this.osmd = new OpenSheetMusicDisplay(this.divRef.current);
+    window.osmd = this.osmd;
     await this.osmd.load(this.state.file);
     await this.osmd.render();
     await window.audioPlayer.loadScore(this.osmd);
