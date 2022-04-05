@@ -2,14 +2,6 @@
   const osmd = new opensheetmusicdisplay.OpenSheetMusicDisplay(document.getElementById("score"));
   const audioPlayer = new OsmdAudioPlayer();
 
-  osmd.selectOptions.onDoubleClickBlankArea = (() => {
-    if (audioPlayer.state === "STOPPED" || audioPlayer.state === "PAUSED") {
-      audioPlayer.play();
-    } else {
-      audioPlayer.pause();
-    }
-  })
-
   const scoreXml = await fetch(
     "http://localhost/PraeludiumInCDur_BWV846_1.xml"
   ).then(r => r.text());
