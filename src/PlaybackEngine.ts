@@ -213,10 +213,13 @@ export default class PlaybackEngine {
       this.cursor.reset();
       this.currentIterationStep = 0;
     }
+    let tmpFollow = this.cursor.cursorOptions.follow;
     while (this.currentIterationStep < step) {
+      this.cursor.cursorOptions.follow = false;
       this.cursor.next();
       ++this.currentIterationStep;
     }
+    this.cursor.cursorOptions.follow = tmpFollow;
     let schedulerStep = this.currentIterationStep;
     if (this.currentIterationStep > 0 && this.currentIterationStep < this.iterationSteps) ++schedulerStep;
     this.scheduler.setIterationStep(schedulerStep);
