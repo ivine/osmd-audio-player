@@ -243,21 +243,7 @@ export default class PlaybackEngine {
 
     let rangeEndNoteIndex = 0;
     if (this.sheet.noteCursorOptions.enableRange) {
-      let measureList = this.sheet.SourceMeasures;
-      let endMeasureIndex = this.sheet.noteCursorOptions.endMeasureIndex;
-      let endNoteIndex = this.sheet.noteCursorOptions.endNoteIndex;
-      if (endMeasureIndex >= 0) {
-          let tmpMeasureIndex: number = endMeasureIndex;
-          while (tmpMeasureIndex >= 0) {
-              const tmpMeasure = measureList[tmpMeasureIndex];
-              if (tmpMeasureIndex === endMeasureIndex) {
-                rangeEndNoteIndex += endNoteIndex;
-              } else {
-                rangeEndNoteIndex += tmpMeasure.VerticalSourceStaffEntryContainers.length;
-              }
-              tmpMeasureIndex--;
-          }
-      }
+      rangeEndNoteIndex = this.sheet.noteCursorOptions.endNoteIndex;
     }
     this.sheetRangeVerticalEndNoteIndex = rangeEndNoteIndex;
 
