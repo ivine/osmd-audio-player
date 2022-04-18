@@ -185,6 +185,11 @@ export default class PlaybackEngine {
   }
 
   async play() {
+    if (this.sheet.noteCursorOptions.enableRange) {
+      this.sheetRangeVerticalEndNoteIndex = this.sheet.noteCursorOptions.endNoteIndex;
+      this.jumpToStep(this.sheet.noteCursorOptions.startNoteIndex);
+    }
+
     await this.ac.resume();
 
     this.cursor.show();
