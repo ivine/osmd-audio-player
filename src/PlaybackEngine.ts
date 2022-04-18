@@ -51,6 +51,7 @@ export default class PlaybackEngine {
   private sheetRangeVerticalEndNoteIndex: number; // 区间范围内垂直面上的结束音符下标
 
   private timeoutHandles: number[];
+  private rangePlayStopTimeout: any;
 
   public playbackSettings: PlaybackSettings;
   public state: PlaybackState;
@@ -78,6 +79,7 @@ export default class PlaybackEngine {
     this.currentIterationStep = 0;
 
     this.timeoutHandles = [];
+    this.rangePlayStopTimeout = null;
 
     this.playbackSettings = {
       bpm: this.defaultBpm,
@@ -118,21 +120,33 @@ export default class PlaybackEngine {
     this.initInstruments();
 
     this.scheduler = new PlaybackScheduler(this.wholeNoteLength, this.ac, (delay, notes, currentNoteIndex) => {
-      this.notePlaybackCallback(delay, notes);
-
       let lastNoteIndex = this.sheetTotalVerticalNotes;
       if (this.sheet.noteCursorOptions.enableRange) {
         lastNoteIndex = this.sheetRangeVerticalEndNoteIndex;
       }
 
-      // console.log('currentNoteIndex --> ', currentNoteIndex);
-      // console.log('lastNoteIndex --> ', lastNoteIndex);
+      console.log('audio player, currentNoteIndex --> ', currentNoteIndex);
+      console.log('audio player, lastNoteIndex --> ', lastNoteIndex);
       if (currentNoteIndex === lastNoteIndex && this.state === PlaybackState.PLAYING) {
         // 正在播放中，且达到最后一个音符
-        this.stop();
-        this.events.emit(PlaybackEvent.REACHED_END, this.state);
+        let maxNoteDuration = 0;
+        for (let note of notes) {
+          let noteDuration = getNoteDuration(note, this.wholeNoteLength);
+          maxNoteDuration = Math.max(noteDuration, maxNoteDuration);
+        }
+        const stopDuration = delay + maxNoteDuration;
+        console.log('audio player, stopDuration --> ', stopDuration)
+        if (!this.rangePlayStopTimeout) {
+          this.notePlaybackCallback(delay, notes); // 播放完最后一个音
+        }
+        this.rangePlayStopTimeout = setTimeout(() => {
+          this.stop();
+          this.events.emit(PlaybackEvent.REACHED_END, this.state);  
+          this.rangePlayStopTimeout = null;
+        }, stopDuration);
         return true;
       }
+      this.notePlaybackCallback(delay, notes);
       return false; // 未到达最后一个音符，返回 fasle
     });
 
