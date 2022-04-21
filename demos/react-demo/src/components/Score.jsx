@@ -22,31 +22,6 @@ class Score extends Component {
   play() { 
     let tmpOsmd: OpenSheetMusicDisplay = window.osmd;
     let tmpAudio: AudioPlayer = window.audioPlayer;
-
-    tmpOsmd.setCursorMoveRange(2, 1 , 3, 1);
-    tmpAudio.countAndSetIterationSteps();
-
-    tmpAudio.jumpToStep(33);
-    let rangeEndNoteIndex = 0;
-    if (tmpOsmd.sheet.noteCursorOptions.enableRange) {
-      let measureList = tmpOsmd.sheet.SourceMeasures;
-      let endMeasureIndex = tmpOsmd.sheet.noteCursorOptions.startMeasureIndex;
-      let endNoteIndex = tmpOsmd.sheet.noteCursorOptions.startNoteIndex;
-      if (endMeasureIndex >= 0) {
-          let tmpMeasureIndex: number = endMeasureIndex;
-          while (tmpMeasureIndex >= 0) {
-              const tmpMeasure = measureList[tmpMeasureIndex];
-              if (tmpMeasureIndex === endMeasureIndex) {
-                rangeEndNoteIndex += endNoteIndex;
-              } else {
-                rangeEndNoteIndex += tmpMeasure.VerticalSourceStaffEntryContainers.length;
-              }
-              tmpMeasureIndex--;
-          }
-      }
-    }
-    console.log('rangeEndNoteIndex ---> ', rangeEndNoteIndex);
-
     tmpAudio.play();
     tmpOsmd.cursor.show();
   }

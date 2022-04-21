@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@ivine/opensheetmusicdisplay": "^0.1.19",
-    "@ivine/osmd-audio-player": "^0.1.4",
+    "@ivine/opensheetmusicdisplay": "^0.1.31",
+    "@ivine/osmd-audio-player": "^0.1.25",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "5.0.0"
