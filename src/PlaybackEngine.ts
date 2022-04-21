@@ -166,13 +166,29 @@ export default class PlaybackEngine {
   private async loadInstruments() {
     let playerPromises: Promise<void>[] = [];
     for (const i of this.sheet.Instruments) {
-      const pbInstrument = this.availableInstruments.find(pbi => pbi.midiId === i.MidiInstrumentId);
+      let pbInstrument = null;
+      for (const avail_instrument of this.availableInstruments) {
+        if (avail_instrument.midiId === i.MidiProgram) {
+          pbInstrument = avail_instrument;
+          i.MidiProgram = avail_instrument.midiId;
+          i.MidiInstrumentId = avail_instrument.midiId;
+          break;
+        } else if (avail_instrument.name === this.getSoundfontInstrumentName(i.PartAbbreviation)) {
+          pbInstrument = avail_instrument;
+          i.MidiInstrumentId = avail_instrument.midiId;
+          break;
+        }
+      }
+      // const pbInstrument = this.availableInstruments.find(pbi => pbi.midiId === i.MidiInstrumentId);
       if (pbInstrument == null) {
         this.fallbackToPiano(i);
       }
       playerPromises.push(this.instrumentPlayer.load(i.MidiInstrumentId));
     }
     await Promise.all(playerPromises);
+  }
+  private getSoundfontInstrumentName(midiName: string): string {
+    return midiName.toLowerCase().replace(/\s+/g, "_");
   }
 
   private fallbackToPiano(i: Instrument) {

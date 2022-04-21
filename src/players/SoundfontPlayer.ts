@@ -1,9 +1,11 @@
 import { InstrumentPlayer, PlaybackInstrument } from "./InstrumentPlayer";
 import { NotePlaybackStyle, NotePlaybackInstruction, ArticulationStyle } from "./NotePlaybackOptions";
-import { midiInstruments } from "../midi/midiInstruments";
 import { IAudioContext } from "standardized-audio-context";
-import supportedSoundfontInstruments from "./musyngkiteInstruments";
 import * as Soundfont from "soundfont-player";
+
+import musyngkiteInstruments from "./musyngkiteInstruments";
+// import { midiInstruments } from "../midi/midiInstruments";
+// import supportedSoundfontInstruments from "./musyngkiteInstruments";
 
 export class SoundfontPlayer implements InstrumentPlayer {
   public instruments: PlaybackInstrument[];
@@ -12,13 +14,20 @@ export class SoundfontPlayer implements InstrumentPlayer {
   private audioContext: IAudioContext;
 
   constructor() {
-    this.instruments = midiInstruments
-      .filter(i => supportedSoundfontInstruments.includes(this.getSoundfontInstrumentName(i[1])))
-      .map(i => ({
-        midiId: i[0],
-        name: i[1],
-        loaded: false,
-      }));
+    this.instruments = musyngkiteInstruments.map((name, index) => ({ 
+                        midiId: index,
+                        name: name,
+                        loaded: false,
+                      }));
+                      
+    // this.instruments = midiInstruments
+    //   .filter(i => supportedSoundfontInstruments.includes(this.getSoundfontInstrumentName(i[1])))
+    //   .map(i => ({
+    //     midiId: i[0],
+    //     musyngkiteName: '',
+    //     name: i[1],
+    //     loaded: false,
+    //   }));
   }
 
   init(audioContext: IAudioContext) {
