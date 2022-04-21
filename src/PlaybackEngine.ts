@@ -125,25 +125,25 @@ export default class PlaybackEngine {
         lastNoteIndex = this.sheetRangeVerticalEndNoteIndex;
       }
 
-      console.log('audio player, currentNoteIndex --> ', currentNoteIndex);
-      console.log('audio player, lastNoteIndex --> ', lastNoteIndex);
+      // console.log('audio player, currentNoteIndex --> ', currentNoteIndex);
+      // console.log('audio player, lastNoteIndex --> ', lastNoteIndex);
       if (currentNoteIndex === lastNoteIndex && this.state === PlaybackState.PLAYING) {
         // 正在播放中，且达到最后一个音符
-        let maxNoteDuration = 0;
-        for (let note of notes) {
-          let noteDuration = getNoteDuration(note, this.wholeNoteLength);
-          maxNoteDuration = Math.max(noteDuration, maxNoteDuration);
-        }
-        const stopDuration = delay + maxNoteDuration;
-        console.log('audio player, stopDuration --> ', stopDuration)
-        if (!this.rangePlayStopTimeout) {
-          this.notePlaybackCallback(delay, notes); // 播放完最后一个音
-        }
-        this.rangePlayStopTimeout = setTimeout(() => {
-          this.stop();
-          this.events.emit(PlaybackEvent.REACHED_END, this.state);  
-          this.rangePlayStopTimeout = null;
-        }, stopDuration);
+        this.stop();
+        this.events.emit(PlaybackEvent.REACHED_END, this.state);  // TODO: 最后一个音符要播放完整声音
+        // let maxNoteDuration = 0;
+        // for (let note of notes) {
+        //   let noteDuration = getNoteDuration(note, this.wholeNoteLength);
+        //   maxNoteDuration = Math.max(noteDuration, maxNoteDuration);
+        // }
+        // const stopDuration = delay + maxNoteDuration;
+        // // console.log('audio player, stopDuration --> ', stopDuration)
+        // if (!this.rangePlayStopTimeout) {
+        //   this.notePlaybackCallback(delay, notes); // 播放完最后一个音
+        // }
+        // this.rangePlayStopTimeout = setTimeout(() => {
+        //   this.rangePlayStopTimeout = null;
+        // }, stopDuration);
         return true;
       }
       this.notePlaybackCallback(delay, notes);
